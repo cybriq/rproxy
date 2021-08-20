@@ -2,5 +2,4 @@ module github.com/cybriq/rproxy
 
 go 1.16
 
-require (
-)
+require github.com/labstack/echo/v4 v4.5.0
