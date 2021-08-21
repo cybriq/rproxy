@@ -18,7 +18,7 @@ type (
 
 const (
 	listenHost = "cybriq.systems"
-	listenPort = "8080"
+	listenPort = "80"
 )
 
 type (
@@ -63,17 +63,23 @@ func main() {
 	e.Any("/*", func(c echo.Context) (err error) {
 		req := c.Request()
 		res := c.Response()
-		h, _, _ := net.SplitHostPort(req.Host)
+		fmt.Println("\n", req.Host)
+		var h string
+		if strings.Contains(req.Host, ":") {
+			h, _, _ = net.SplitHostPort(req.Host)
+		} else {
+			h = req.Host
+		}
 		// if the hostname is the non-subdomain this reverse proxy will apply
 		host := hosts[""]
+		fmt.Println("\nhost", h, "\n")
 		if h != listenHost {
-			fmt.Println("host", h)
 			for i := range proxies {
 				prefix := proxies[i].subdomain
 				if prefix == "" {
 					continue
 				}
-				fmt.Println("prefix", prefix)
+				fmt.Println("\nprefix", prefix, h)
 				if strings.HasPrefix(h, prefix) {
 					host = hosts[proxies[i].subdomain]
 					break
@@ -84,7 +90,7 @@ func main() {
 		return
 	},
 	)
-	e.Logger.Fatal(e.Start(":" + listenPort))
+	e.Logger.Fatal(e.Start(listenHost + ":" + listenPort))
 }
 
 func mustParseURL(u string) *url.URL {
