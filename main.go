@@ -17,7 +17,7 @@ type (
 )
 
 const (
-	listenHost = "localhost"
+	listenHost = "cybriq.systems"
 	listenPort = "8080"
 )
 
