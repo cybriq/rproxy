@@ -1,0 +1,13 @@
+[Unit]
+Description=Reverse Proxy for cybriq.systems
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/home/loki/bin/rproxy
+
+[Install]
+WantedBy=multi-user.target
